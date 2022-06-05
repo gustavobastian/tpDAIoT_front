@@ -1,0 +1,7 @@
+{
+  "name": "frontend-Daiot",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
