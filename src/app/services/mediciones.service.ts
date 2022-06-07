@@ -27,7 +27,7 @@ export class MedicionesService {
     
     return this._http.get(this.urlApi+ "/logs/"+id).toPromise().then((listado:Medicion[])=>{            
       //console.log("here2");  
-      console.log(listado);
+      //console.log(listado[1]);
       return listado;
     });
   }

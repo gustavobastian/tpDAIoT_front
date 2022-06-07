@@ -119,9 +119,9 @@
       <ion-button style="box-shadow: none;" color="tertiary" (click)="visualizar()">Visualizar</ion-button>
       <ion-button style="box-shadow: none;" color="tertiary" (click)="salir_visualizar()">no Visualizar</ion-button>
     </ion-list>
-
-
-
+    <div *ngIf="history_visualization == true">
+      <div echarts [options]="chartOption" [autoResize]	class="my-chart"></div>
+    </div>  
   </div>  
   
 </ion-content>

@@ -9,6 +9,8 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/mergeMapTo';
 import 'rxjs/add/operator/map';
+import { EChartsOption } from 'echarts';
+
 
 
 import { interval } from 'rxjs';
@@ -36,8 +38,27 @@ export class FolderPage implements OnInit {
 
   dispositivoLocalId: number=0;
   parameterLocal: string="Temperatura";
+  
+   n:number = 20;
+   myArray = new Array(this.n).fill(null).map((_, i) => i + 1);
 
-
+  chartOption: EChartsOption = {
+    xAxis: {
+      type: 'category',
+      data: this.myArray,//['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    yAxis: {
+      min:0,
+      max:40,
+      type: 'value',
+    },
+    series: [
+      {
+        data: [20, 22, 21, 15, 17, 19, 20],
+        type: 'line',//line
+      },
+    ],
+  };
   
 
 
@@ -103,8 +124,8 @@ export class FolderPage implements OnInit {
   public enviar(id:number){    
  //   console.log(this.formDispositivo.get("nombre")?.value); 
  //   console.log(this.formDispositivo.get("ubicacion")?.value);
-    console.log(this.dispositivos[id].nombre);
-    console.log(this.dispositivos[id].ubicacion);
+    //console.log(this.dispositivos[id].nombre);
+    //console.log(this.dispositivos[id].ubicacion);
     this.dispositivoServ.saveSensorModifications(this.dispositivos[id]); 
     this.sensor_editing= false;
   } 
@@ -113,21 +134,32 @@ export class FolderPage implements OnInit {
   } 
   public salir_visualizar(){        
     this.history_visualization=false;
+    console.log(this.history_visualization);
   } 
 
-  public visualizar(){    
-    console.log("aqui");
-    console.log("dispositivo:" + this.dispositivoLocalId);
-    console.log("parameter:" + this.parameterLocal);
-    if(this.dispositivoLocalId>0){
-      this.llamoMedicionesLocal(this.dispositivoLocalId);
+  public async visualizar(){    
+    //console.log("aqui");
+    //console.log("dispositivo:" + this.dispositivoLocalId);
+    //console.log("parameter:" + this.parameterLocal);
+    if (this.dispositivoLocalId>0){
+      await this.llamoMedicionesLocal(this.dispositivoLocalId);
     }
     else{
-      this.llamoMediciones();
+      await this.llamoMediciones();
     }
     //
-    //console.log(this.mediciones);
+    console.log("veo mediciones");
+    console.log(this.mediciones);
+    console.log("**************************************************");
+    console.log(this.mediciones[0]);
+    let series;
+    for(let i=0;i<this.n;i++){
+   //   series[i]=this.mediciones[i].Temperatura;
+        }
+    
+    
     this.history_visualization=true;
+    console.log(this.history_visualization);
   } 
 }
 
