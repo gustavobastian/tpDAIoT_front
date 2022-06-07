@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Dispositivo } from '../model/dispositivo';
+import { Medicion } from '../model/medicion';
 import {DispositivoService} from '../services/dispositivo.service';
+import {MedicionesService} from '../services/mediciones.service';
 import { Observable } from 'rxjs/Observable';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import 'rxjs/add/observable/interval';
@@ -24,20 +26,22 @@ const example = source.pipe(take(1), repeat());
   styleUrls: ['./folder.page.scss'],
 })
 export class FolderPage implements OnInit {
-  public formDispositivo:FormGroup;
   public folder: string;
   data:any;
   dispositivos: Array <Dispositivo> = new Array<Dispositivo>();
+  mediciones: Array <Medicion> = new Array<Medicion>();
   sensor_editing: boolean = false;
+  history_visualization: boolean = false;
   index: number=0; 
 
-  
+  dispositivoLocalId: number=0;
+  parameterLocal: string="Temperatura";
 
 
   
 
 
-  constructor(private activatedRoute: ActivatedRoute,public dispositivoServ: DispositivoService,) { // private fBuilder: FormBuilder
+  constructor(private activatedRoute: ActivatedRoute,public dispositivoServ: DispositivoService,public MedicionesServ: MedicionesService) { // private fBuilder: FormBuilder
     
     example.subscribe(x =>this.upDate());
     
@@ -48,6 +52,18 @@ export class FolderPage implements OnInit {
     let listado= await this.dispositivoServ.getListadoDispositivos();    
     console.log("llego");
     this.dispositivos=listado;    
+  }
+  async llamoMediciones(){
+    console.log("Estoy en el llamoMediciones y llame a las mediciones");
+    let listado= await this.MedicionesServ.getListadoMediciones();    
+    console.log("llego");
+    this.mediciones=listado;    
+  }
+  async llamoMedicionesLocal(id: number ){
+    console.log("Estoy en el llamoMediciones y llame a las mediciones");
+    let listado= await this.MedicionesServ.getMedicion(id);    
+    console.log("llego");
+    this.mediciones=listado;    
   }
 
   ngOnInit() {
@@ -65,12 +81,15 @@ export class FolderPage implements OnInit {
       this.dispositivos[id].luz1=0;
     }
     else this.dispositivos[id].luz1=1;
+    this.dispositivoServ.saveLighModifications(this.dispositivos[id]); 
   }  
   public onClickLight2(id:number){    
     if(this.dispositivos[id].luz2==1){
       this.dispositivos[id].luz2=0;
     }
     else this.dispositivos[id].luz2=1;
+
+    this.dispositivoServ.saveLighModifications(this.dispositivos[id]); 
   } 
   public editar(id:number){    
   /*  this.formDispositivo=this.fBuilder.group({
@@ -92,5 +111,23 @@ export class FolderPage implements OnInit {
   public salir(){    
     this.sensor_editing= false;
   } 
+  public salir_visualizar(){        
+    this.history_visualization=false;
+  } 
 
+  public visualizar(){    
+    console.log("aqui");
+    console.log("dispositivo:" + this.dispositivoLocalId);
+    console.log("parameter:" + this.parameterLocal);
+    if(this.dispositivoLocalId>0){
+      this.llamoMedicionesLocal(this.dispositivoLocalId);
+    }
+    else{
+      this.llamoMediciones();
+    }
+    //
+    //console.log(this.mediciones);
+    this.history_visualization=true;
+  } 
 }
+

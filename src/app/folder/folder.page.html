@@ -88,7 +88,7 @@
             </div>    
         </div>    
      
-    </div> 
+   </div> 
    <!--Registros historicos de los sensores-->       
    <div *ngIf="folder == 'Historico'">
     <ion-list>   
@@ -97,7 +97,7 @@
 
         <ion-item>
           <ion-label>Parámetro a mostrar</ion-label>
-          <ion-select placeholder="Temperatura">
+          <ion-select [(ngModel)]="parameterLocal" placeholder="Temperatura">
             <ion-select-option seleccion="Temperatura">Temperatura</ion-select-option>
             <ion-select-option seleccion="Humedad">Humedad</ion-select-option>
           </ion-select>
@@ -107,14 +107,17 @@
 
       <ion-item>
         <ion-label>Sensor específico</ion-label>
-        <ion-select placeholder="Elegir">
-          <ion-select-option value="todos">Todos</ion-select-option>
-          <div *ngFor="let element of dispositivos; let i=index">   
-          <ion-select-option value="{{dispositivos[i].nombre}}">{{dispositivos[i].nombre}}</ion-select-option>          
+        <ion-select [(ngModel)]="dispositivoLocalId"  placeholder="Elegir">
+          <ion-select-option  value="0">Todos</ion-select-option>
+          <div *ngFor="let element of dispositivos; let i=index">  
+            <div *ngIf="dispositivos[i].topic.search('sensor') !=-1">   
+              <ion-select-option value="{{dispositivos[i].dispositivoId}}">{{dispositivos[i].dispositivoId}}</ion-select-option>          
+            </div>  
           </div>
         </ion-select>
       </ion-item>
-    
+      <ion-button style="box-shadow: none;" color="tertiary" (click)="visualizar()">Visualizar</ion-button>
+      <ion-button style="box-shadow: none;" color="tertiary" (click)="salir_visualizar()">no Visualizar</ion-button>
     </ion-list>
 
 

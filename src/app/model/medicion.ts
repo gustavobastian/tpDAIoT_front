@@ -1,20 +1,24 @@
 export class Medicion{
     private _medicionId: number;
+    private _logId: number;
     private _medicionTemperatura: number;
     private _medicionHumedad: number;
     private _luz1: number;
     private _luz2: number;
     private _fecha: string;    
     private _dispositivoId: number;
+    private _versionId: number;
 
-    constructor(medIdDato: number, medicionT :number, medicionH: number, Luz1: number, Luz2: number, fechaDato: string, dispositivoIdDato: number){
+    constructor(medIdDato: number,logIdDato: number,fechaDato: string, Luz1: number, Luz2: number,  medicionT :number, medicionH: number, dispositivoIdDato: number, versionIdDato: number){
         this._medicionId = medIdDato;
+        this._logId = logIdDato;
         this._fecha= fechaDato;
         this._medicionHumedad = medicionH;
         this._medicionTemperatura = medicionT;
         this._luz1=Luz1;
         this._luz2=Luz2;
         this._dispositivoId= dispositivoIdDato;
+        this._versionId= versionIdDato;
     }
 
     public get medicionId(){
@@ -61,4 +65,5 @@ export class Medicion{
     }
 
 };
+
 
