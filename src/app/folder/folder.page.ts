@@ -15,6 +15,8 @@ import { EChartsOption } from 'echarts';
 
 import { interval } from 'rxjs';
 import { repeat, take } from 'rxjs/operators';
+import { ValueAccessor } from '@ionic/angular/directives/control-value-accessors/value-accessor';
+
 
 //every 30 seconds refresh values
 const source = interval(30000);
@@ -40,12 +42,13 @@ export class FolderPage implements OnInit {
   parameterLocal: string="Temperatura";
   
    n:number = 20;
-   myArray = new Array(this.n).fill(null).map((_, i) => i + 1);
+   
 
+   //chart for visualization
   chartOption: EChartsOption = {
     xAxis: {
       type: 'category',
-      data: this.myArray,//['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     },
     yAxis: {
       min:0,
@@ -69,21 +72,22 @@ export class FolderPage implements OnInit {
    }
 
   async llamoService(){
-    console.log("Estoy en el llamoServicec y llame al service");
+   // console.log("Estoy en el llamoServicec y llame al service");
     let listado= await this.dispositivoServ.getListadoDispositivos();    
-    console.log("llego");
+    //console.log("listadodev"+listado);
     this.dispositivos=listado;    
   }
   async llamoMediciones(){
-    console.log("Estoy en el llamoMediciones y llame a las mediciones");
+   // console.log("Estoy en el llamoMediciones y llame a las mediciones");
     let listado= await this.MedicionesServ.getListadoMediciones();    
-    console.log("llego");
+    //console.log("llego");
     this.mediciones=listado;    
   }
   async llamoMedicionesLocal(id: number ){
-    console.log("Estoy en el llamoMediciones y llame a las mediciones");
+   // console.log("Estoy en el llamoMediciones y llame a las mediciones");
     let listado= await this.MedicionesServ.getMedicion(id);    
-    console.log("llego");
+   // console.log("llego");
+  //  console.log("listadoMed"+listado);
     this.mediciones=listado;    
   }
 
@@ -139,27 +143,76 @@ export class FolderPage implements OnInit {
 
   public async visualizar(){    
     //console.log("aqui");
-    //console.log("dispositivo:" + this.dispositivoLocalId);
+    console.log("dispositivo:" + this.dispositivoLocalId);
     //console.log("parameter:" + this.parameterLocal);
+    
     if (this.dispositivoLocalId>0){
       await this.llamoMedicionesLocal(this.dispositivoLocalId);
-    }
-    else{
-      await this.llamoMediciones();
-    }
-    //
-    console.log("veo mediciones");
-    console.log(this.mediciones);
-    console.log("**************************************************");
-    console.log(this.mediciones[0]);
-    let series;
-    for(let i=0;i<this.n;i++){
-   //   series[i]=this.mediciones[i].Temperatura;
-        }
     
+    //    
     
+    let limit=0;
+    if(this.n>this.mediciones.length){limit=this.mediciones.length;}
+    else(limit=this.n);
+
+    let series = new Array<number>(limit);     
+    //let xData = new Array(limit).fill(null).map((_, i) => i + 1);
+    let xData = new Array<string>(limit);
+    let titleLocal =" Hola";
+    if(this.parameterLocal=="Temperatura"){
+      titleLocal="Temperatura";
+    }else{
+      titleLocal="Humedad";
+    }
+
+    for(let i=0;i<limit;i++){
+     
+      let date = new Date(this.mediciones[i].ts);      
+
+      if(this.parameterLocal=="Temperatura"){
+      series[limit-i-1]=this.mediciones[i].etemperatura;
+      xData[limit-i-1]=date.getHours().toString()+":"+date.getMinutes().toString();
+      
+      }
+      else{
+        series[limit-i-1]=this.mediciones[i].ehumedad;
+        
+        xData[limit-i-1]=date.getHours().toString()+":"+date.getMinutes().toString();
+      }     
+     }
+    this.chartOption  = {
+      title:{
+        text: titleLocal,
+      },
+      xAxis: {
+        type: 'category',
+        data: xData,
+      },
+      yAxis: {
+        min:Math.min.apply(Math,series)-5,
+        max:Math.max.apply(Math,series)+5,
+        type: 'value',        
+      },
+      series: [
+        {
+          data: series,
+          type: 'line',//line
+        }      
+      ]
+       
+    };
     this.history_visualization=true;
+  }
+  else{
+    this.history_visualization=false;
+    console.log("nada que mostrar");
+  }
+
+    
+    
     console.log(this.history_visualization);
   } 
+
+
 }
 

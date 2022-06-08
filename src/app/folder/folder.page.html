@@ -97,24 +97,27 @@
 
         <ion-item>
           <ion-label>Parámetro a mostrar</ion-label>
-          <ion-select [(ngModel)]="parameterLocal" placeholder="Temperatura">
+          <ion-select [(ngModel)]="parameterLocal" [disabled]="history_visualization==true" placeholder="Temperatura">
             <ion-select-option seleccion="Temperatura">Temperatura</ion-select-option>
             <ion-select-option seleccion="Humedad">Humedad</ion-select-option>
           </ion-select>
         </ion-item>
       
       </ion-list>
-
       <ion-item>
         <ion-label>Sensor específico</ion-label>
-        <ion-select [(ngModel)]="dispositivoLocalId"  placeholder="Elegir">
-          <ion-select-option  value="0">Todos</ion-select-option>
+        <ion-select [(ngModel)]="dispositivoLocalId" [disabled]="history_visualization==true" placeholder="Elegir">
+          <ion-select-option  value="0">Ninguno</ion-select-option>
           <div *ngFor="let element of dispositivos; let i=index">  
             <div *ngIf="dispositivos[i].topic.search('sensor') !=-1">   
               <ion-select-option value="{{dispositivos[i].dispositivoId}}">{{dispositivos[i].dispositivoId}}</ion-select-option>          
             </div>  
           </div>
         </ion-select>
+      </ion-item>
+      <ion-item>
+      <ion-label>Nro muestras</ion-label>
+      <ion-input placeholder="20" [(ngModel)]="n" [disabled]="history_visualization==true" type="number"></ion-input>
       </ion-item>
       <ion-button style="box-shadow: none;" color="tertiary" (click)="visualizar()">Visualizar</ion-button>
       <ion-button style="box-shadow: none;" color="tertiary" (click)="salir_visualizar()">no Visualizar</ion-button>
