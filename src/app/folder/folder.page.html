@@ -37,6 +37,16 @@
                                     <ion-icon style="font-size: 2em" md="water-outline"></ion-icon>
                                     <ion-label style="box-shadow:none; font-size: 1em;">{{dispositivos[i].humedad }}%</ion-label>
                                   </ion-item>
+
+                                  <ion-item style="box-shadow: none;">          
+                                    
+                                    <ion-label style="box-shadow:none; font-size: 1em;">Estado:{{dispositivos[i].status }}</ion-label>
+                                  </ion-item>
+                                <!--  <ion-item style="box-shadow: none;">          
+                                    <ion-icon style="font-size: 1em" md="water-outline"></ion-icon>
+                                    <ion-label style="box-shadow:none; font-size: 1em;">Ultima conexion:{{dispositivos[i].status }}</ion-label>
+                                  </ion-item>-->
+
                                   <ion-button style="box-shadow: none;" (click)="editar([i])">Modificar</ion-button>        
                                 </ion-card>
                             </div>
@@ -54,6 +64,13 @@
               <ion-item>
                 <ion-label position="stacked">Ubicacion</ion-label>
                 <ion-input type="text" [(ngModel)]="dispositivos[index].ubicacion" placeholder="{{dispositivos[index].ubicacion}}"></ion-input>
+           <!--     <div class="text-danger" *ngIf="formDispositivo.controls.ubicacion.invalid && formDispositivo.controls.ubicacion.touched">La ubicacion es requerida</div>-->
+              </ion-item>
+
+
+              <ion-item>
+                <ion-label position="stacked">Ultima medicion</ion-label>
+                <p >"{{date}}"</p>
            <!--     <div class="text-danger" *ngIf="formDispositivo.controls.ubicacion.invalid && formDispositivo.controls.ubicacion.touched">La ubicacion es requerida</div>-->
               </ion-item>
               

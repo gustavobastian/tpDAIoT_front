@@ -31,4 +31,15 @@ export class MedicionesService {
       return listado;
     });
   }
+  getLastMedicion(id: number):Promise<string>{   
+    //console.log("here");  
+    
+    return this._http.get(this.urlApi+ "/lastlogs/"+id).toPromise().then((listado:Medicion)=>{            
+      console.log("here2");  
+      console.log(listado); 
+    let output=JSON.stringify(listado[0]);  
+    console.log(output);      
+      return output;
+    });
+  }
 }
